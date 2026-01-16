@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shurzio 5.0 | Multi-Business Command Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        financial: '#2563EB',
+                        vodka: '#7C3AED',
+                        beer: '#F59E0B',
+                        dark: '#0f172a',
+                        darker: '#020617'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%); }
+        .glass { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+        .glow-financial { box-shadow: 0 0 20px rgba(37, 99, 235, 0.3); }
+        .glow-vodka { box-shadow: 0 0 20px rgba(124, 58, 237, 0.3); }
+        .glow-beer { box-shadow: 0 0 20px rgba(245, 158, 11, 0.3); }
+        @keyframes pulse-subtle { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        .pulse-subtle { animation: pulse-subtle 2s infinite; }
+    </style>
+</head>
+<body class="text-white min-h-screen">
+    <div id="app" class="max-w-7xl mx-auto p-4 md:p-8">
+
+        <!-- Header -->
+        <header class="flex items-center justify-between mb-8">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 via-purple-500 to-amber-500 flex items-center justify-center text-2xl font-bold">S</div>
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold">Shurzio 5.0</h1>
+                    <p class="text-gray-400 text-sm">Multi-Business Command Center</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="text-gray-400 text-sm hidden md:block" id="current-date"></span>
+                <button onclick="showSection('settings')" class="p-2 rounded-lg hover:bg-white/10 transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Business Switcher -->
+        <nav class="flex gap-2 mb-6 overflow-x-auto pb-2">
+            <button onclick="setFilter('all')" id="btn-all" class="filter-btn px-4 py-2 rounded-lg font-medium transition whitespace-nowrap bg-white/20">All Businesses</button>
+            <button onclick="setFilter('financial')" id="btn-financial" class="filter-btn px-4 py-2 rounded-lg font-medium transition whitespace-nowrap hover:bg-financial/20">
+                <span class="inline-block w-2 h-2 rounded-full bg-financial mr-2"></span>Financial
+            </button>
+            <button onclick="setFilter('vodka')" id="btn-vodka" class="filter-btn px-4 py-2 rounded-lg font-medium transition whitespace-nowrap hover:bg-vodka/20">
+                <span class="inline-block w-2 h-2 rounded-full bg-vodka mr-2"></span>Vodka
+            </button>
+            <button onclick="setFilter('beer')" id="btn-beer" class="filter-btn px-4 py-2 rounded-lg font-medium transition whitespace-nowrap hover:bg-beer/20">
+                <span class="inline-block w-2 h-2 rounded-full bg-beer mr-2"></span>Beer
+            </button>
+        </nav>
+
+        <!-- Alerts Banner -->
+        <div id="alerts-banner" class="glass rounded-xl p-4 mb-6">
+            <div class="flex items-center justify-between mb-3">
+                <h3 class="font-bold flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-red-500 pulse-subtle"></span>
+                    Active Alerts
+                </h3>
+                <span class="text-xs text-gray-400" id="alert-count">4 alerts</span>
+            </div>
+            <div id="alerts-list" class="space-y-2"></div>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <div class="glass rounded-xl p-4">
+                <p class="text-gray-400 text-xs uppercase tracking-wide">Total Revenue</p>
+                <p class="text-2xl font-bold mt-1" id="total-revenue">$45,685</p>
+                <p class="text-xs text-green-400 mt-1">+12% vs last month</p>
+            </div>
+            <div class="glass rounded-xl p-4">
+                <p class="text-gray-400 text-xs uppercase tracking-wide">Active Pipeline</p>
+                <p class="text-2xl font-bold mt-1" id="pipeline-value">$195,500</p>
+                <p class="text-xs text-gray-400 mt-1">26 deals</p>
+            </div>
+            <div class="glass rounded-xl p-4">
+                <p class="text-gray-400 text-xs uppercase tracking-wide">Pending Commission</p>
+                <p class="text-2xl font-bold mt-1 text-amber-400" id="pending-commission">$3,420</p>
+                <p class="text-xs text-gray-400 mt-1">Ready to collect</p>
+            </div>
+            <div class="glass rounded-xl p-4">
+                <p class="text-gray-400 text-xs uppercase tracking-wide">Overdue Tasks</p>
+                <p class="text-2xl font-bold mt-1 text-red-400" id="overdue-tasks">8</p>
+                <p class="text-xs text-gray-400 mt-1">Follow-ups needed</p>
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="grid md:grid-cols-3 gap-6 mb-6">
+
+            <!-- Financial Advisory Card -->
+            <div class="glass rounded-xl p-6 glow-financial business-card" data-business="financial">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-financial/20 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-financial" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold">Financial Advisory</h3>
+                            <p class="text-xs text-green-400">Active</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex justify-between">
+                        <span class="text-gray-400 text-sm">AUM</span>
+                        <span class="font-bold">$2.45M</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-400 text-sm">Active Clients</span>
+                        <span class="font-bold">18</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-400 text-sm">Annual Revenue</span>
+                        <span class="font-bold">$30,625</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-400 text-sm">Reviews Due</span>
+                        <span class="font-bold text-amber-400">4</span>
+                    </div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-white/10">
+                    <div class="text-xs text-gray-400 mb-2">Pipeline</div>
+                    <div class="flex gap-1">
+                        <div class="flex-1 bg-gray-600 rounded h-2">
+                            <div class="bg-financial h-full rounded" style="width: 60%"></div>
+                        </div>
+                    </div>
+                    <div class="text-xs text-gray-400 mt-1">$175,000 potential</div>
+                </div>
+            </div>
+
+            <!-- Vodka Card -->
+            <div class="glass rounded-xl p-6 glow-vodka business-card" data-business="vodka">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-vodka/20 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-vodka" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold">Vodka Brand</h3>
+                            <p class="text-xs text-amber-400">Struggling</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex justify-between">
+                        <span class="text-gray-400 text-sm">Active Accounts</span>
+                        <span class="font-bold">12</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-400 text-sm">Monthly Cases</span>
+                        <span class="font-bold">45</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-400 text-sm">Monthly Revenue</span>
+                        <span class="font-bold">$8,100</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-400 text-sm">Stale Accounts</span>
+                        <span class="font-bold text-red-400">5</span>
+                    </div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-white/10">
+                    <div class="text-xs text-gray-400 mb-2">Pipeline</div>
+                    <div class="flex gap-1">
+                        <div class="flex-1 bg-gray-600 rounded h-2">
+                            <div class="bg-vodka h-full rounded" style="width: 25%"></div>
+                        </div>
+                    </div>
+                    <div class="text-xs text-gray-400 mt-1">$12,000 potential</div>
+                </div>
+            </div>
+
+            <!-- Beer Card -->
+            <div class="glass rounded-xl p-6 glow-beer business-card" data-business="beer">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-beer/20 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-beer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        </div>
+                        <div>
+                            <h3 class="font-bold">Beer Brand</h3>
+                            <p class="text-xs text-green-400">Growing +22%</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex justify-between">
+                        <span class="text-gray-400 text-sm">Active Accounts</span>
+                        <span class="font-bold">8</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-400 text-sm">Monthly Kegs</span>
+                        <span class="font-bold">24</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-400 text-sm">Monthly Revenue</span>
+                        <span class="font-bold">$3,960</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-400 text-sm">Leads in Pipeline</span>
+                        <span class="font-bold text-green-400">15</span>
+                    </div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-white/10">
+                    <div class="text-xs text-gray-400 mb-2">Pipeline</div>
+                    <div class="flex gap-1">
+                        <div class="flex-1 bg-gray-600 rounded h-2">
+                            <div class="bg-beer h-full rounded" style="width: 45%"></div>
+                        </div>
+                    </div>
+                    <div class="text-xs text-gray-400 mt-1">$8,500 potential</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contacts & Pipeline Section -->
+        <div class="grid md:grid-cols-2 gap-6 mb-6">
+
+            <!-- Key Contacts -->
+            <div class="glass rounded-xl p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold">Key Contacts</h3>
+                    <button onclick="showModal('add-contact')" class="text-xs bg-white/10 px-3 py-1 rounded-lg hover:bg-white/20 transition">+ Add</button>
+                </div>
+                <div id="contacts-list" class="space-y-3"></div>
+            </div>
+
+            <!-- Unified Pipeline -->
+            <div class="glass rounded-xl p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-bold">Unified Pipeline</h3>
+                    <button onclick="showModal('add-deal')" class="text-xs bg-white/10 px-3 py-1 rounded-lg hover:bg-white/20 transition">+ Add Deal</button>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-400">Leads</span>
+                            <span>16</span>
+                        </div>
+                        <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-gray-400 to-gray-500 rounded-full" style="width: 40%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-400">Qualified</span>
+                            <span>8</span>
+                        </div>
+                        <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-blue-400 to-blue-500 rounded-full" style="width: 30%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-400">Proposal</span>
+                            <span>3</span>
+                        </div>
+                        <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-purple-400 to-purple-500 rounded-full" style="width: 15%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-gray-400">Negotiation</span>
+                            <span>2</span>
+                        </div>
+                        <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-amber-400 to-amber-500 rounded-full" style="width: 10%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 pt-4 border-t border-white/10">
+                    <div class="grid grid-cols-3 gap-2 text-center text-xs">
+                        <div>
+                            <div class="w-3 h-3 rounded-full bg-financial mx-auto mb-1"></div>
+                            <div class="text-gray-400">Financial</div>
+                            <div class="font-bold">$175k</div>
+                        </div>
+                        <div>
+                            <div class="w-3 h-3 rounded-full bg-vodka mx-auto mb-1"></div>
+                            <div class="text-gray-400">Vodka</div>
+                            <div class="font-bold">$12k</div>
+                        </div>
+                        <div>
+                            <div class="w-3 h-3 rounded-full bg-beer mx-auto mb-1"></div>
+                            <div class="text-gray-400">Beer</div>
+                            <div class="font-bold">$8.5k</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Insights Section -->
+        <div class="glass rounded-xl p-6 mb-6">
+            <h3 class="font-bold mb-4">AI Insights</h3>
+            <div id="insights-list" class="grid md:grid-cols-2 gap-3"></div>
+        </div>
+
+        <!-- Shurz 'Em Up Section -->
+        <div class="glass rounded-xl p-6 bg-gradient-to-br from-purple-900/50 to-indigo-900/50 border-purple-500/30">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h3 class="font-bold text-xl flex items-center gap-2">Shurz 'Em Up</h3>
+                    <p class="text-purple-200 text-sm">Sticky Situation Solver</p>
+                </div>
+            </div>
+            <div class="grid md:grid-cols-2 gap-4">
+                <div>
+                    <label class="text-xs uppercase text-purple-300 font-bold">The Situation</label>
+                    <select id="situation" class="w-full mt-1 p-3 rounded-lg bg-black/30 border border-purple-500/50 text-white">
+                        <option value="price">Price is too high</option>
+                        <option value="competitor">Going with competitor</option>
+                        <option value="ghosted">Client Ghosted Me</option>
+                        <option value="vodka_slow">Vodka isn't selling</option>
+                        <option value="no_budget">No Budget</option>
+                        <option value="need_time">Need more time to decide</option>
+                        <option value="bad_timing">Bad timing</option>
+                    </select>
+                    <button onclick="shurzEmUp()" class="mt-3 w-full bg-white text-purple-900 px-4 py-2 rounded-lg font-bold hover:scale-[1.02] transition">Generate Comeback</button>
+                </div>
+                <div id="shurz-result" class="hidden bg-black/40 p-4 rounded-lg border-l-4 border-purple-400">
+                    <p class="text-xs text-purple-400 font-bold mb-1">SAY THIS:</p>
+                    <p id="shurz-line" class="text-lg font-medium mb-2"></p>
+                    <p id="shurz-context" class="text-sm text-gray-400 italic"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-8 text-center text-gray-500 text-sm">
+            <p>Shurzio 5.0 | Built with LDS.json Architecture</p>
+            <p class="text-xs mt-1">Same pattern as SPEC Explorer - 356 DNA sequences in &lt;1 hour</p>
+        </footer>
+    </div>
+
+    <script>
+        // Demo Data
+        const demoData = {
+            contacts: [
+                { id: 'c001', name: "Mike's Sports Bar", businesses: ['vodka', 'beer'], type: 'business', score: 85, note: 'Great relationship - carries both brands.' },
+                { id: 'c002', name: 'Dr. Sarah Chen', businesses: ['financial'], type: 'individual', aum: 450000, score: 92, note: 'High-value client. Quarterly reviews.' },
+                { id: 'c003', name: 'Downtown Distributors', businesses: ['vodka'], type: 'distributor', score: 45, note: 'Struggling with vodka placement.' },
+                { id: 'c004', name: 'The Craft House', businesses: ['beer'], type: 'business', score: 78, note: 'New beer account. Excited about brand.' },
+                { id: 'c005', name: 'Jim Patterson', businesses: ['financial', 'vodka'], type: 'individual', aum: 125000, score: 70, note: 'Financial client who owns a bar.' }
+            ],
+            alerts: [
+                { priority: 'high', business: 'vodka', message: '5 accounts haven\'t ordered in 60+ days', action: 'Schedule re-engagement calls' },
+                { priority: 'high', business: 'financial', message: '4 portfolio reviews due this month', action: 'Send calendar invites' },
+                { priority: 'medium', business: 'beer', message: '2 proposals pending response > 7 days', action: 'Follow up' },
+                { priority: 'low', business: 'all', message: '$3,420 in commissions ready to collect', action: 'Submit invoice' }
+            ],
+            insights: [
+                { icon: '🔗', text: '7 contacts overlap between businesses - cross-sell potential' },
+                { icon: '📈', text: 'Beer brand growing 22% MoM - focus new accounts here' },
+                { icon: '⚠️', text: 'Vodka struggling - consider promotional pricing or events' },
+                { icon: '🤝', text: '3 financial clients own bars/restaurants - warm intros for beverage' }
+            ],
+            shurzResponses: {
+                price: { line: "I hear you. But what is the cost of NOT solving this problem today?", ctx: "Reframes price to value. Let silence work for you." },
+                competitor: { line: "Respect. Who did you choose? ... Cool. When that doesn't work out, I'll be here.", ctx: "Plants doubt while staying professional." },
+                ghosted: { line: "Should I assume you've moved on, or just busy? Either way is cool.", ctx: "The 'permission to leave' technique - creates urgency." },
+                vodka_slow: { line: "When's your slowest night? I'll come do a free tasting and work the crowd.", ctx: "Offers immediate value without asking for anything." },
+                no_budget: { line: "What if I showed you how this pays for itself in 90 days?", ctx: "ROI play - shifts from cost to investment." },
+                need_time: { line: "Totally get it. What specifically do you need to figure out? Maybe I can help.", ctx: "Uncovers the real objection hiding behind 'need time'." },
+                bad_timing: { line: "When WOULD be good timing? I'll put it in my calendar right now.", ctx: "Locks in a future commitment." }
+            }
+        };
+
+        let currentFilter = 'all';
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            renderAlerts();
+            renderContacts();
+            renderInsights();
+        });
+
+        function setFilter(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('bg-white/20', 'bg-financial/20', 'bg-vodka/20', 'bg-beer/20');
+            });
+            const activeBtn = document.getElementById(`btn-${filter}`);
+            if (filter === 'all') {
+                activeBtn.classList.add('bg-white/20');
+            } else {
+                activeBtn.classList.add(`bg-${filter}/20`);
+            }
+
+            // Filter business cards
+            document.querySelectorAll('.business-card').forEach(card => {
+                if (filter === 'all' || card.dataset.business === filter) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            renderAlerts();
+            renderContacts();
+        }
+
+        function renderAlerts() {
+            const container = document.getElementById('alerts-list');
+            const filtered = demoData.alerts.filter(a =>
+                currentFilter === 'all' || a.business === 'all' || a.business === currentFilter
+            );
+            document.getElementById('alert-count').textContent = `${filtered.length} alerts`;
+
+            container.innerHTML = filtered.map(alert => {
+                const priorityColors = { high: 'text-red-400', medium: 'text-amber-400', low: 'text-gray-400' };
+                const businessColors = { financial: 'bg-financial', vodka: 'bg-vodka', beer: 'bg-beer', all: 'bg-gray-500' };
+                return `
+                    <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition cursor-pointer">
+                        <span class="w-2 h-2 rounded-full ${businessColors[alert.business]}"></span>
+                        <div class="flex-1">
+                            <p class="text-sm ${priorityColors[alert.priority]}">${alert.message}</p>
+                            <p class="text-xs text-gray-500">${alert.action}</p>
+                        </div>
+                        <button class="text-xs bg-white/10 px-2 py-1 rounded hover:bg-white/20">Action</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderContacts() {
+            const container = document.getElementById('contacts-list');
+            const filtered = demoData.contacts.filter(c =>
+                currentFilter === 'all' || c.businesses.includes(currentFilter)
+            );
+
+            container.innerHTML = filtered.map(contact => {
+                const scoreColor = contact.score >= 80 ? 'text-green-400' : contact.score >= 60 ? 'text-amber-400' : 'text-red-400';
+                const businessDots = contact.businesses.map(b => {
+                    const colors = { financial: 'bg-financial', vodka: 'bg-vodka', beer: 'bg-beer' };
+                    return `<span class="w-2 h-2 rounded-full ${colors[b]}"></span>`;
+                }).join('');
+
+                return `
+                    <div class="flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 transition cursor-pointer">
+                        <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-sm font-bold">
+                            ${contact.name.split(' ').map(w => w[0]).join('').slice(0,2)}
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2">
+                                <p class="font-medium">${contact.name}</p>
+                                <div class="flex gap-1">${businessDots}</div>
+                            </div>
+                            <p class="text-xs text-gray-400">${contact.note}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm font-bold ${scoreColor}">${contact.score}</p>
+                            <p class="text-xs text-gray-500">score</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderInsights() {
+            const container = document.getElementById('insights-list');
+            container.innerHTML = demoData.insights.map(insight => `
+                <div class="flex items-start gap-3 p-3 rounded-lg bg-white/5">
+                    <span class="text-xl">${insight.icon}</span>
+                    <p class="text-sm">${insight.text}</p>
+                </div>
+            `).join('');
+        }
+
+        function shurzEmUp() {
+            const situation = document.getElementById('situation').value;
+            const response = demoData.shurzResponses[situation];
+            document.getElementById('shurz-line').textContent = response.line;
+            document.getElementById('shurz-context').textContent = response.ctx;
+            document.getElementById('shurz-result').classList.remove('hidden');
+        }
+
+        function showModal(type) {
+            alert(`${type} modal would open here. Full implementation coming soon!`);
+        }
+
+        function showSection(section) {
+            alert(`${section} section would open here. Full implementation coming soon!`);
+        }
+    </script>
+</body>
+</html>
