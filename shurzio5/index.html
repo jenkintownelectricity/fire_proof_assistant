@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shurzio 5.0 - Multi-Business Command Center</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            financial: '#2563EB',
+            vodka: '#7C3AED',
+            beer: '#F59E0B',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .card { @apply bg-white rounded-xl shadow-sm border border-gray-200 p-6; }
+    .stat-card { @apply bg-gradient-to-br from-gray-50 to-white rounded-xl p-4 border border-gray-100; }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <!-- Header -->
+  <header class="bg-white shadow-sm border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+          <span class="text-white font-bold text-lg">S5</span>
+        </div>
+        <div>
+          <h1 class="text-xl font-bold text-gray-900">Shurzio 5.0</h1>
+          <p class="text-xs text-gray-500">Multi-Business Command Center</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-2">
+        <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">Online</span>
+        <span class="text-sm text-gray-500">For Scherzer</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-4 py-8">
+
+    <!-- Business Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+
+      <!-- Financial Advisory -->
+      <div class="card border-l-4 border-l-financial">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-semibold text-gray-900">Financial Advisory</h2>
+          <span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-medium">Active</span>
+        </div>
+        <div class="space-y-3">
+          <div class="stat-card">
+            <p class="text-xs text-gray-500 uppercase">Assets Under Management</p>
+            <p class="text-2xl font-bold text-financial">$2.45M</p>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="stat-card">
+              <p class="text-xs text-gray-500">Clients</p>
+              <p class="text-xl font-semibold">18</p>
+            </div>
+            <div class="stat-card">
+              <p class="text-xs text-gray-500">Reviews Due</p>
+              <p class="text-xl font-semibold text-orange-500">4</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <p class="text-xs text-gray-500">Annual Revenue</p>
+            <p class="text-lg font-semibold text-green-600">$30,625</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vodka Brand -->
+      <div class="card border-l-4 border-l-vodka">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-semibold text-gray-900">Vodka Brand</h2>
+          <span class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs font-medium">Struggling</span>
+        </div>
+        <div class="space-y-3">
+          <div class="stat-card">
+            <p class="text-xs text-gray-500 uppercase">Monthly Revenue</p>
+            <p class="text-2xl font-bold text-vodka">$8,100</p>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="stat-card">
+              <p class="text-xs text-gray-500">Accounts</p>
+              <p class="text-xl font-semibold">12</p>
+            </div>
+            <div class="stat-card">
+              <p class="text-xs text-gray-500">Stale</p>
+              <p class="text-xl font-semibold text-red-500">5</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <p class="text-xs text-gray-500">Monthly Cases</p>
+            <p class="text-lg font-semibold">45 cases</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Beer Brand -->
+      <div class="card border-l-4 border-l-beer">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-semibold text-gray-900">Beer Brand</h2>
+          <span class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-medium">Growing +22%</span>
+        </div>
+        <div class="space-y-3">
+          <div class="stat-card">
+            <p class="text-xs text-gray-500 uppercase">Monthly Revenue</p>
+            <p class="text-2xl font-bold text-beer">$3,960</p>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="stat-card">
+              <p class="text-xs text-gray-500">Accounts</p>
+              <p class="text-xl font-semibold">8</p>
+            </div>
+            <div class="stat-card">
+              <p class="text-xs text-gray-500">Leads</p>
+              <p class="text-xl font-semibold text-green-500">15</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <p class="text-xs text-gray-500">Monthly Kegs</p>
+            <p class="text-lg font-semibold">24 kegs</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Unified Metrics -->
+    <div class="card mb-8">
+      <h2 class="text-lg font-semibold text-gray-900 mb-4">Unified Dashboard</h2>
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div class="text-center p-4 bg-gray-50 rounded-lg">
+          <p class="text-3xl font-bold text-gray-900">52</p>
+          <p class="text-sm text-gray-500">Total Contacts</p>
+        </div>
+        <div class="text-center p-4 bg-gray-50 rounded-lg">
+          <p class="text-3xl font-bold text-blue-600">7</p>
+          <p class="text-sm text-gray-500">Cross-Business</p>
+        </div>
+        <div class="text-center p-4 bg-gray-50 rounded-lg">
+          <p class="text-3xl font-bold text-green-600">$45.7K</p>
+          <p class="text-sm text-gray-500">Monthly Revenue</p>
+        </div>
+        <div class="text-center p-4 bg-gray-50 rounded-lg">
+          <p class="text-3xl font-bold text-purple-600">$3,420</p>
+          <p class="text-sm text-gray-500">Pending Commission</p>
+        </div>
+        <div class="text-center p-4 bg-gray-50 rounded-lg">
+          <p class="text-3xl font-bold text-orange-500">8</p>
+          <p class="text-sm text-gray-500">Overdue Follow-ups</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Two Column Layout -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+
+      <!-- Alerts -->
+      <div class="card">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Alerts</h2>
+        <div class="space-y-3">
+          <div class="flex items-start space-x-3 p-3 bg-red-50 rounded-lg border border-red-100">
+            <span class="w-2 h-2 mt-2 bg-red-500 rounded-full"></span>
+            <div>
+              <p class="font-medium text-red-800">5 accounts haven't ordered in 60+ days</p>
+              <p class="text-sm text-red-600">Vodka Brand • Schedule re-engagement calls</p>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3 p-3 bg-orange-50 rounded-lg border border-orange-100">
+            <span class="w-2 h-2 mt-2 bg-orange-500 rounded-full"></span>
+            <div>
+              <p class="font-medium text-orange-800">4 portfolio reviews due this month</p>
+              <p class="text-sm text-orange-600">Financial • Send calendar invites</p>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3 p-3 bg-yellow-50 rounded-lg border border-yellow-100">
+            <span class="w-2 h-2 mt-2 bg-yellow-500 rounded-full"></span>
+            <div>
+              <p class="font-medium text-yellow-800">2 proposals pending response > 7 days</p>
+              <p class="text-sm text-yellow-600">Beer Brand • Follow up</p>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3 p-3 bg-green-50 rounded-lg border border-green-100">
+            <span class="w-2 h-2 mt-2 bg-green-500 rounded-full"></span>
+            <div>
+              <p class="font-medium text-green-800">$3,420 in commissions ready to collect</p>
+              <p class="text-sm text-green-600">All Businesses • Submit invoice</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Insights -->
+      <div class="card">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">AI Insights</h2>
+        <div class="space-y-3">
+          <div class="p-3 bg-blue-50 rounded-lg border border-blue-100">
+            <p class="text-blue-800">7 contacts overlap between businesses - <strong>cross-sell potential</strong></p>
+          </div>
+          <div class="p-3 bg-green-50 rounded-lg border border-green-100">
+            <p class="text-green-800">Beer brand growing <strong>22% MoM</strong> - focus new accounts here</p>
+          </div>
+          <div class="p-3 bg-red-50 rounded-lg border border-red-100">
+            <p class="text-red-800">Vodka struggling - consider <strong>promotional pricing or events</strong></p>
+          </div>
+          <div class="p-3 bg-purple-50 rounded-lg border border-purple-100">
+            <p class="text-purple-800">3 financial clients own bars/restaurants - <strong>warm intros for beverage</strong></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sample Contacts -->
+    <div class="card mb-8">
+      <h2 class="text-lg font-semibold text-gray-900 mb-4">Top Contacts</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead>
+            <tr class="text-left text-sm text-gray-500 border-b">
+              <th class="pb-3 font-medium">Name</th>
+              <th class="pb-3 font-medium">Businesses</th>
+              <th class="pb-3 font-medium">Score</th>
+              <th class="pb-3 font-medium">Note</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            <tr class="hover:bg-gray-50">
+              <td class="py-3 font-medium">Mike's Sports Bar</td>
+              <td class="py-3">
+                <span class="px-2 py-1 bg-vodka/10 text-vodka rounded text-xs mr-1">Vodka</span>
+                <span class="px-2 py-1 bg-beer/10 text-beer rounded text-xs">Beer</span>
+              </td>
+              <td class="py-3"><span class="text-green-600 font-semibold">85</span></td>
+              <td class="py-3 text-sm text-gray-500">Owner interested in investment advice</td>
+            </tr>
+            <tr class="hover:bg-gray-50">
+              <td class="py-3 font-medium">Dr. Sarah Chen</td>
+              <td class="py-3">
+                <span class="px-2 py-1 bg-financial/10 text-financial rounded text-xs">Financial</span>
+              </td>
+              <td class="py-3"><span class="text-green-600 font-semibold">92</span></td>
+              <td class="py-3 text-sm text-gray-500">$450K AUM • Referred 2 clients this year</td>
+            </tr>
+            <tr class="hover:bg-gray-50">
+              <td class="py-3 font-medium">Downtown Distributors</td>
+              <td class="py-3">
+                <span class="px-2 py-1 bg-vodka/10 text-vodka rounded text-xs">Vodka</span>
+              </td>
+              <td class="py-3"><span class="text-red-500 font-semibold">45</span></td>
+              <td class="py-3 text-sm text-gray-500">Struggling with placement • Need strategy</td>
+            </tr>
+            <tr class="hover:bg-gray-50">
+              <td class="py-3 font-medium">The Craft House</td>
+              <td class="py-3">
+                <span class="px-2 py-1 bg-beer/10 text-beer rounded text-xs">Beer</span>
+              </td>
+              <td class="py-3"><span class="text-green-600 font-semibold">78</span></td>
+              <td class="py-3 text-sm text-gray-500">New account • Potential for vodka too</td>
+            </tr>
+            <tr class="hover:bg-gray-50">
+              <td class="py-3 font-medium">Jim Patterson</td>
+              <td class="py-3">
+                <span class="px-2 py-1 bg-financial/10 text-financial rounded text-xs mr-1">Financial</span>
+                <span class="px-2 py-1 bg-vodka/10 text-vodka rounded text-xs">Vodka</span>
+              </td>
+              <td class="py-3"><span class="text-yellow-600 font-semibold">70</span></td>
+              <td class="py-3 text-sm text-gray-500">$125K AUM • Owns a bar • Cross-sell!</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Pipeline -->
+    <div class="card">
+      <h2 class="text-lg font-semibold text-gray-900 mb-4">Unified Pipeline</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="text-center p-4 border-2 border-dashed border-gray-200 rounded-lg">
+          <p class="text-sm text-gray-500 mb-2">Leads</p>
+          <p class="text-2xl font-bold">16</p>
+          <div class="flex justify-center space-x-1 mt-2">
+            <span class="w-3 h-3 rounded-full bg-financial"></span>
+            <span class="w-3 h-3 rounded-full bg-vodka"></span>
+            <span class="w-3 h-3 rounded-full bg-beer"></span>
+          </div>
+        </div>
+        <div class="text-center p-4 border-2 border-dashed border-gray-200 rounded-lg">
+          <p class="text-sm text-gray-500 mb-2">Qualified</p>
+          <p class="text-2xl font-bold">8</p>
+          <p class="text-xs text-gray-400 mt-1">$95K value</p>
+        </div>
+        <div class="text-center p-4 border-2 border-dashed border-gray-200 rounded-lg">
+          <p class="text-sm text-gray-500 mb-2">Proposal</p>
+          <p class="text-2xl font-bold">3</p>
+          <p class="text-xs text-gray-400 mt-1">$45K value</p>
+        </div>
+        <div class="text-center p-4 border-2 border-green-200 bg-green-50 rounded-lg">
+          <p class="text-sm text-green-600 mb-2">Total Pipeline</p>
+          <p class="text-2xl font-bold text-green-700">$195.5K</p>
+          <p class="text-xs text-green-500 mt-1">Weighted: $48K</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-gray-200 mt-12">
+    <div class="max-w-7xl mx-auto px-4 py-6 text-center text-sm text-gray-500">
+      <p>Shurzio 5.0 • Multi-Business Command Center • Powered by LDS.json</p>
+      <p class="mt-1">Built with the same architecture as SPEC Explorer (356 DNA sequences in 1 hour)</p>
+    </div>
+  </footer>
+
+</body>
+</html>
